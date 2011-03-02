@@ -1,0 +1,7 @@
+name: zx_onu
+host: 61.154.10.50
+port: 10023
+username: admin
+password: admin
+prompt: "(Login:)|(Password:)|(ZXAN>)|(ZXAN#)|(password:)"
+        
