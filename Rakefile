@@ -7,10 +7,10 @@ require 'spec/rake/spectask'
 spec = Gem::Specification.new do |s|
   s.name = "stammerer"
   s.version = "0.0.1"
-  s.author = "Your Name"
-  s.email = "Your Email"
+  s.author = "wupher"
+  s.email = "wupher.fan@gmail.com"
   s.homepage = "http://example.com"
-  s.description = s.summary = "A gem that provides..."
+  s.description = s.summary = "A gem that provides communication with onu devices"
   
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
