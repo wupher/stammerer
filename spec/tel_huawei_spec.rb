@@ -5,7 +5,6 @@ describe 'telnet huawei pon device' do
     output = telnet_table_cmd('display board 0')
     output.should_not be_nil
     puts "display board 0:\n--------------------------"
-    # output.each{|arr| p arr}
     p output
     puts
   end
@@ -15,7 +14,7 @@ describe 'telnet huawei pon device' do
   it "shoud get pon sn successfully" do
     output = telnet_pair_cmd('display pon sn')
     output.should_not be_nil
-    puts "disp pon sn:"
+    puts "disp pon sn:--------------------------"
     p output
     puts
   end
@@ -25,7 +24,7 @@ describe 'telnet huawei pon device' do
   it "should get version successfully" do
       output = telnet_pair_cmd('display version 0/0')
       output.should_not be_nil
-      puts 'display version 0/0:'
+      puts 'display version 0/0:--------------------------'
       p output
       puts
     end
