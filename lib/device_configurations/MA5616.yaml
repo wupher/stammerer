@@ -1,6 +1,6 @@
 name: MA5616
 host: 10.100.0.253
 port: 23
-username: root
-password: mduadmin
+username: fanwu5
+password: abc123
 prompt: "(User name:)|(User password:)|(MA5616>)|(MA5616#)|(password:)"
