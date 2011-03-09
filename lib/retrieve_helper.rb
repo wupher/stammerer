@@ -1,4 +1,4 @@
-#
+#此函数已废弃
 #用于解析telnet返回结果中表格形式的输出值：
 #  Slot Shelf Type    Port  HardVer          SoftVer          Status      
 #----------------------------------------------------------------------
@@ -46,3 +46,23 @@ def retrieve_pair_info(input_str, seperator = ':')
   end
   result
 end
+
+#
+#用于处理一行中包含多个seperator的情况
+#如：
+#Dynamic-profile       Index:    -      Name: -
+#如应解析成 
+# [ Dynamic-profile Index  =>  - ,
+#   Dynamic-profile Name   =>  - ]
+def retrieve_multi_pair(str, seperator=':')
+  result = []
+  regx = /(\S+:\s+\S)/
+  str.strip!
+  return nil if str.count(seperator) < 2
+  header = str.split(' ')[0]
+  tail =  str.split(header)[1].strip
+  pairs = tail.scan(regx)
+  pairs.each{ |pair| result << retrieve_pair_info("#{header} #{pair}")}
+  result
+end
+

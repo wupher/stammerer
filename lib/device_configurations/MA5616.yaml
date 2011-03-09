@@ -3,4 +3,4 @@ host: 10.100.0.253
 port: 23
 username: fanwu5
 password: abc123
-prompt: "(User name:)|(User password:)|(MA5616>)|(MA5616#)|(password:)"
+prompt: "(User name:)|(User password:)|(MA5616>)|(MA5616#)|(password:)|MA5616\(config\)#|MA5616\(config-if-h248-\d\)#"
