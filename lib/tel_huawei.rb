@@ -21,11 +21,22 @@ def cmd_skeleton(cmd, options=nil, cmd_options=nil)
   options = YAML::load(File.open(File.dirname(__FILE__)+'/device_configurations' + '/MA5616.yaml')) unless options
   
   #默认的命令操作模式
-  cmd_options = {:h248_mgid => 0, :config_model => false, :enable_model => true} if cmd_options.nil? or cmd_options.empty?
+  cmd_options = {:h248_mgid => 0, :config_model => false, :enable_model => true, :adsl_model => false, :adsl_frame => 0,
+     :adsl_slot => 4, :gponnni_model => false, :gponnni_port=>'0/0/1'} if cmd_options.nil? or cmd_options.empty?
   cmd_options[:h248_mgid] |= 0
-  cmd_options[:config_model] |= false
-  cmd_options[:h248_model] |= false
-  cmd_options[:enable_model] |= true
+  
+  cmd_options[:config_model] = false if cmd_options[:config_model].nil?
+  cmd_options[:config_model] = true if cmd_options[:adsl_model] or cmd_options[:h249_model] or cmd_options[:gponnni_model]
+  
+  cmd_options[:h248_model] = false if cmd_options[:h248_model].nil?
+  cmd_options[:enable_model] = true if cmd_options[:enable_model].nil?
+  cmd_options[:adsl_model] = false if cmd_options[:adsl_model].nil?
+  cmd_options[:gponnni_port] = '0/0/1' if cmd_options[:gponnni_port].nil? or cmd_options[:gponnni_port].empty?
+  cmd_options[:gponnni_model] = false if cmd_options[:gponnni_model].nil?
+  
+  cmd_options[:adsl_frame] |= 0
+  cmd_options[:adsl_slot] |= 4
+  
   
   cmd_result = []
   telnet = Net::Telnet.new("Host" => options['host'], "Port" => options['port'], 'Prompt' => Regexp.new(options['prompt'],'Timeout' => 10),
@@ -36,8 +47,13 @@ def cmd_skeleton(cmd, options=nil, cmd_options=nil)
   # telnet.cmd('Q')
   telnet.cmd('scroll 512')
   telnet.cmd("String"=> 'enable', "Match" => /MA5616#/) if cmd_options[:enable_model]
-  telnet.cmd('config') if cmd_options[:config_model] or cmd_options[:h248_model]
+  
+  telnet.cmd('config') if cmd_options[:config_model] or cmd_options[:h248_model] or
+   cmd_options[:adsl_model] or cmd_options[:gponnni_model]
+   
   telnet.cmd("interface h248 #{cmd_options[:h248_mgid]}") if cmd_options[:h248_model]
+  telnet.cmd("interface adsl #{cmd_options[:adsl_frame]}/#{cmd_options[:adsl_slot]}") if cmd_options[:adsl_model]
+  telnet.cmd("interface gponnni #{cmd_options[:gponnni_port]}") if cmd_options[:gponnni_port]
   yield(telnet, cmd_result)
   cmd_result
 end
@@ -45,8 +61,8 @@ end
 #
 #用于获取以分隔符分隔的命令结果
 #
-def telnet_pair_cmd(cmd, options=nil)
-  cmd_skeleton(cmd,options) do |telnet, cmd_result|
+def telnet_pair_cmd(cmd, options=nil, cmd_options=nil)
+  cmd_skeleton(cmd, options, cmd_options) do |telnet, cmd_result|
     telnet.cmd(cmd){ |ret| tmp = retrieve_pair_info(ret); cmd_result << tmp unless tmp.empty? }
   end
 end
@@ -60,8 +76,8 @@ def telnet_table_cmd(cmd, options=nil)
   end
 end
 
-def telnet_multi_type(cmd, options=nil)
-  the_result = cmd_skeleton(cmd, options) do |telnet, cmd_result|
+def telnet_multi_type(cmd, options=nil, cmd_options=nil)
+  the_result = cmd_skeleton(cmd, options, cmd_options) do |telnet, cmd_result|
     telnet.cmd(cmd){|ret| cmd_result << ret}
   end
   the_result.delete_if {|x| x.length < 10  }

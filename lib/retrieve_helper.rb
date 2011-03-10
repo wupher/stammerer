@@ -40,7 +40,7 @@ def retrieve_pair_info(input_str, seperator = ':')
   result = {}
   input_str.each_line do |line|
     if line=~/:/
-      pair = line.split(':').each{ |v| v.strip!  }
+      pair = line.split(':').each{|v| v.strip!}
       result[pair[0]] = pair[1]
     end
   end
@@ -58,7 +58,8 @@ def retrieve_multi_pair(str, seperator=':')
   result = []
   regx = /(\S+:\s+\S)/
   str.strip!
-  return nil if str.count(seperator) < 2
+  return nil if str.count(seperator) < 1
+  return retrieve_pair_info(seperator) if str.count(seperator) < 2
   header = str.split(' ')[0]
   tail =  str.split(header)[1].strip
   pairs = tail.scan(regx)
