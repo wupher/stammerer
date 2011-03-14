@@ -29,7 +29,7 @@ end
 
 def tel_system_info()
   #TODO: 
-  telnet_pair_cmd('display sys-info').to_json
+  telnet_return_pair('display system sys-info').to_json
 end
 
 def tel_last_10_minutes_mem_occupancy()
@@ -64,5 +64,4 @@ def tel_onu_port_info(frame=0, slot=0, port=1)
   cmd_options = {:gponnni_model => true, :gponnni_port => "#{frame}/#{slot}/#{port}"}
   telnet_multi_type("display onu info",nil, cmd_options).to_json
 end
-
 

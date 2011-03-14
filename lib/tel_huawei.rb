@@ -124,3 +124,19 @@ def telnet_multi_row(cmd, options=nil, cmd_options=nil)
    result['line'] = line_content
    result
 end
+
+def telnet_return_pair(cmd, options=nil, cmd_options=nil)
+  the_result = cmd_skeleton(cmd, options, cmd_options) do |telnet, cmd_result|
+    telnet.cmd(cmd){ |ret| cmd_result << ret  }
+  end
+  the_result.delete_if{ |x| x.length < 2}
+  the_result.each{ |x| x.strip!}
+  the_result.delete_if{ |x| x =~ /-{10}/  }
+  result={}
+  0.upto(the_result.size-1) do |i|
+    line = the_result[i]
+    next_line = the_result[i+1]
+    result[line] = next_line if line =~ /:/
+  end
+  result
+end
