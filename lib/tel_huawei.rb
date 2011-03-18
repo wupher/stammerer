@@ -62,9 +62,12 @@ end
 #用于获取以分隔符分隔的命令结果
 #
 def telnet_pair_cmd(cmd, options=nil, cmd_options=nil)
-  cmd_skeleton(cmd, options, cmd_options) do |telnet, cmd_result|
+  array_type_result = cmd_skeleton(cmd, options, cmd_options) do |telnet, cmd_result|
     telnet.cmd(cmd){ |ret| tmp = retrieve_pair_info(ret); cmd_result << tmp unless tmp.empty? }
   end
+  hash_type_result = {}
+  array_type_result.each{ |x| hash_type_result.update(x)  }
+  {"pair" => hash_type_result}
 end
 
 #
