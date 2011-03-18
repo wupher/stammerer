@@ -24,7 +24,7 @@ def tel_pstn_board_info(frame=0, slot=4)
 end
 
 def tel_adsl_port_info(frameid=0, slot=4, port=0)
-  telnet_multi_row("display interface adsl #{frameid}/#{slot}/#{port}").to_json
+   telnet_multi_row("display interface adsl #{frameid}/#{slot}/#{port}").to_json
 end
 
 def tel_system_info()
@@ -48,7 +48,7 @@ def tel_current_mem_usage()
   telnet_pair_cmd('display mem 0/0').to_json
 end
 
-def tel_adsl_port_info(frame=0, slot=4, port=0)
+def tel_adsl_port_parameters(frame=0, slot=4, port=0)
   cmd_options = {:adsl_model => true, :adsl_frame => frame, :adsl_slot => slot}
   telnet_multi_row("display parameter #{port}",nil,cmd_options).to_json
 end
@@ -64,4 +64,3 @@ def tel_onu_port_info(frame=0, slot=0, port=1)
   cmd_options = {:gponnni_model => true, :gponnni_port => "#{frame}/#{slot}/#{port}"}
   telnet_multi_type("display onu info",nil, cmd_options).to_json
 end
-
