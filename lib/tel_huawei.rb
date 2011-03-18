@@ -46,7 +46,7 @@ def cmd_skeleton(cmd, options=nil, cmd_options=nil)
   telnet.cmd(options['password'])
   # telnet.cmd('Q')
   telnet.cmd('scroll 512')
-  telnet.cmd("String"=> 'enable', "Match" => /MA5616#/) if cmd_options[:enable_model]
+  telnet.cmd("String"=> 'enable') if cmd_options[:enable_model]
   
   telnet.cmd('config') if cmd_options[:config_model] or cmd_options[:h248_model] or
    cmd_options[:adsl_model] or cmd_options[:gponnni_model]

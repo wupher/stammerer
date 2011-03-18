@@ -3,7 +3,6 @@ require "tel_huawei"
 require "json"
 
 def tel_board_info(slot=0)
-  return nil unless slot.is_a?(Integer)
   telnet_table_cmd("display board #{slot}").to_json
 end
 
@@ -64,3 +63,4 @@ def tel_onu_port_info(frame=0, slot=0, port=1)
   cmd_options = {:gponnni_model => true, :gponnni_port => "#{frame}/#{slot}/#{port}"}
   telnet_multi_type("display onu info",nil, cmd_options).to_json
 end
+

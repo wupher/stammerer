@@ -1,0 +1,6 @@
+name: MA5680T
+host: 10.90.100.2
+port: 23
+username: root
+password: admin
+prompt: "(User name:)|(User password:)|(-MA5680T-\d\d>)|(password:)|(-MA5680T-\d\d#)"
