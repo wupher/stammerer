@@ -66,7 +66,7 @@ class MA5616
 
   def tel_adsl_port_performance(frame=0, slot=4, port=0)
     cmd_options = {:adsl_mode => true, :adsl_board_frameid => frame, :adsl_board_slotid  => slot}
-    telnet_pair_cmd("display statistics performance #{port} current-15minutes", nil, cmd_options).to_json
+    telnet_pair_cmd("display statistics performance #{port} current-15minutes", cmd_options).to_json
   end
 
 
