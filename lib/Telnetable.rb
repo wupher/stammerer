@@ -5,14 +5,15 @@ require File.dirname(__FILE__)+"/retrieve_helper"
 module Telnetable
   def skeleton_command(cmd, command_options)
     raise ArgumentError, "cmd cannot be nil or empty" if cmd.nil? or cmd.empty?
-    p "Prompt:#{@prompt}"
-    telnet = Net::Telnet.new("Host" => @host, "Port" => @port, "Pormpt" => Regexp.new(@prompt), 
+    
+    telnet = Net::Telnet.new("Host" => @host, "Port" => @port, "Prompt" => Regexp.new(@prompt), 
     "Output_log" => File.dirname(__FILE__)+'/../logs/telnet_onu.log')
     
-    # telnet.cmd(@user_name)
-    # telent.cmd(@password)
+    telnet.cmd("\n")
+    telnet.cmd(@user_name)
+    telnet.cmd(@password)
     
-    telnet.login("Name" => @user_name, "Password" => @password, "LoginPrompt" => /User name:/)
+
     
     telnet.cmd('scroll 512')
     prepare_cmd_options(telnet, command_options)
@@ -24,6 +25,7 @@ module Telnetable
   
   def prepare_cmd_options(telnet, command_options={})
     enable_mode = true
+    command_options = {} if command_options.nil?
     config_mode |= command_options[:config_mode] | command_options[:adsl_mode] | command_options[:h248_mode]
     
     adsl_mode |= command_options[:adsl_mode]

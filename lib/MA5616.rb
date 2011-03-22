@@ -1,6 +1,7 @@
 require "rubygems"
-require File.dirname(__FILE__)+'/tel_huawei'
 require File.dirname(__FILE__)+"/Telnetable"
+require "json"
+require "yaml"
 
 class MA5616
   include Telnetable
