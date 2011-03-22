@@ -55,15 +55,16 @@ end
 # [ Dynamic-profile Index  =>  - ,
 #   Dynamic-profile Name   =>  - ]
 def retrieve_multi_pair(str, seperator=':')
-  result = []
-  regx = /(\S+:\s+\S)/
+  result = {}
   str.strip!
-  return nil if str.count(seperator) < 1
+  return result if str.count(seperator) < 1
   return retrieve_pair_info(seperator) if str.count(seperator) < 2
+
   header = str.split(' ')[0]
   tail =  str.split(header)[1].strip
-  pairs = tail.scan(regx)
-  pairs.each{ |pair| result << retrieve_pair_info("#{header} #{pair}")}
+  pairs = tail.split(/\s{2,}/).collect{ |t| "#{header} #{t}"  }
+  
+  pairs.each{ |pair| result.update(retrieve_pair_info(pair))  }
   result
 end
 

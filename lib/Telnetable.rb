@@ -27,7 +27,7 @@ module Telnetable
     enable_mode = true
     command_options = {} if command_options.nil?
     config_mode |= command_options[:config_mode] | command_options[:adsl_mode] | command_options[:h248_mode]
-    
+
     adsl_mode |= command_options[:adsl_mode]
     adsl_board_frameid = command_options[:adsl_board_frameid]
     adsl_board_slotid = command_options[:adsl_board_slotid]
@@ -38,7 +38,7 @@ module Telnetable
     raise ArgumentError, "Please specify h248 mgid" if h248_mode & h248_mgid.nil?
     
     gponnni_port = command_options[:gponnni_port]
-    
+
     telnet.cmd('enable') if enable_mode
     telnet.cmd('config') if config_mode
     telnet.cmd("interface adsl #{adsl_board_frameid}/#{adsl_board_slotid}") if adsl_mode
@@ -74,7 +74,7 @@ module Telnetable
     result = {}
     pair_content, table_content = [], []
     final_result.split("\n").each do |line|
-      next if line.empty? or line.strip.empty?
+      next if line.strip.empty?
       if line.index(':')
         pair_content <<  retrieve_pair_info(line)
       else
@@ -87,7 +87,7 @@ module Telnetable
   end
   
   def telnet_multi_row(cmd, cmd_options=nil)
-    the_result = skeleton_command(cmd,options,cmd_options) do |telnet, cmd_result|
+    the_result = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
        telnet.cmd(cmd){ |ret| cmd_result << ret}
      end
      the_result.delete_if{ |x| x.length < 10  }
@@ -95,12 +95,12 @@ module Telnetable
      final_result = ""
      the_result.each{ |arr| final_result << arr }
      result = {}
-     pair_content, line_content = [], []
+     pair_content, line_content = {}, []
      final_result.split("\n").each do |line|
-      next if line.empty? or line.strip.empty? or line =~ /-{20}/
+      next if line.strip.empty? or line =~ /-{20}/
       if line.index(':')
-        pair_content << retrieve_pair_info(line) unless line.count(':') > 1
-        pair_content << retrieve_multi_pair(line) if line.count(':') > 1
+        pair_content.update retrieve_pair_info(line) unless line.count(':') > 1
+        pair_content.update retrieve_multi_pair(line) if line.count(':') > 1
       else
         line_content << line.strip
       end
