@@ -3,6 +3,7 @@ require "net/telnet"
 require File.dirname(__FILE__)+"/retrieve_helper"
 
 module Telnetable
+  #函数模板，负责telnet的登录，通过block来执行要在telnet上执行的操作
   def skeleton_command(cmd, command_options)
     raise ArgumentError, "cmd cannot be nil or empty" if cmd.nil? or cmd.empty?
     
@@ -26,7 +27,7 @@ module Telnetable
   def prepare_cmd_options(telnet, command_options={})
     enable_mode = true
     command_options = {} if command_options.nil?
-    config_mode |= command_options[:config_mode] | command_options[:adsl_mode] | command_options[:h248_mode]
+    config_mode |= command_options[:config_mode] | command_options[:adsl_mode] | command_options[:h248_mode] | command_options[:gponnni_port]
 
     adsl_mode |= command_options[:adsl_mode]
     adsl_board_frameid = command_options[:adsl_board_frameid]
@@ -50,10 +51,9 @@ module Telnetable
     array_type_result = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
       telnet.cmd(cmd){ |ret| tmp = retrieve_pair_info(ret); cmd_result << tmp unless tmp.empty? }
     end
-    hash_type_result = {}
-    array_type_result.each{ |x| hash_type_result.update(x)  }
-    {"pair" => hash_type_result}
+    {"pair" => array_type_result.inject{ |hash, x| hash.update x}}
   end
+  
   
   def telnet_table_cmd(cmd, cmd_options=nil)
     skeleton_command(cmd,cmd_options) do |telnet, cmd_result|
@@ -67,10 +67,9 @@ module Telnetable
     end
     the_result.delete_if {|x| x.length < 10  }
     the_result.each{ |x| x.delete!("-")  }
-    final_result = ""
-    the_result.each do |arr|
-      final_result<<arr
-    end
+
+    final_result = the_result.inject{ |sum, arr| sum << arr  }
+
     result = {}
     pair_content, table_content = [], []
     final_result.split("\n").each do |line|
@@ -92,8 +91,9 @@ module Telnetable
      end
      the_result.delete_if{ |x| x.length < 10  }
      the_result.each{ |x| x.delete("-") }
-     final_result = ""
-     the_result.each{ |arr| final_result << arr }
+     
+     
+     final_result = the_result.inject{ |sum, arr| sum << arr  }
      result = {}
      pair_content, line_content = {}, []
      final_result.split("\n").each do |line|
