@@ -71,11 +71,11 @@ module Telnetable
     final_result = the_result.inject{ |sum, arr| sum << arr  }
 
     result = {}
-    pair_content, table_content = [], []
+    pair_content, table_content = {}, []
     final_result.split("\n").each do |line|
       next if line.strip.empty?
       if line.index(':')
-        pair_content <<  retrieve_pair_info(line)
+        pair_content.update(retrieve_pair_info(line))
       else
         table_content << line.split(/\s{2}/).delete_if{|str|str.empty?}
       end
