@@ -58,7 +58,7 @@ def retrieve_multi_pair(str, seperator=':')
   result = {}
   str.strip!
   return result if str.count(seperator) < 1
-  return retrieve_pair_info(seperator) if str.count(seperator) < 2
+  return retrieve_pair_info(str, seperator) if str.count(seperator) == 1
 
   header = str.split(' ')[0]
   tail =  str.split(header)[1].strip
