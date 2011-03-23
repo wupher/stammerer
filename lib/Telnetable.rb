@@ -14,8 +14,6 @@ module Telnetable
     telnet.cmd(@user_name)
     telnet.cmd(@password)
     
-
-    
     telnet.cmd('scroll 512')
     prepare_cmd_options(telnet, command_options)
     

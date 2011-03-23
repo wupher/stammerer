@@ -1,2 +1,5 @@
 TODO
-Add your code to lib/<%= name %>.rb
+添加测试
+把helper中无用的table去除掉，或者考虑把代码中的相应功能重新抽取到这里
+考虑统一个抽取pair的方法，而不用客户端分别调用两个retrieve_helper
+把helper也抽取成一个module
