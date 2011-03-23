@@ -76,6 +76,6 @@ class MA5616
   end
 end
 
-ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/device_configurations/MA5616.yaml"))
-ma5616 = MA5616.new(ma5616_configuration)
-print ma5616.tel_adsl_port_parameters
+# ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/device_configurations/MA5616.yaml"))
+# ma5616 = MA5616.new(ma5616_configuration)
+# print ma5616.tel_adslboard_info
