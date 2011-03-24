@@ -109,17 +109,17 @@ module Telnetable
   end
   
   def telnet_return_pair(cmd, cmd_options=nil)
-    the_result = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
+    output = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
       telnet.cmd(cmd){ |ret| cmd_result << ret  }
     end
-    the_result.delete_if{ |x| x.length < 2}
-    the_result.each{ |x| x.strip!}
-    the_result.delete_if{ |x| x =~ /-{10}/  }
+    output.delete_if{ |x| x.length < 2 or x=~ /-{10}/}
+    output.each{ |x| x.strip!}
+
     result={}
-    0.upto(the_result.size-1) do |i|
-      line = the_result[i]
-      next_line = the_result[i+1]
-      result[line] = next_line if line =~ /:/
+    output.each_index do |i|
+      pair_string = "#{output[i]} #{output[i+1]}" if output[i]=~ /:$/
+      pair_string = output[i] if output[i] =~ /:\n/
+      result.update(retrieve_pair_info pair_string) if pair_string
     end
     result
   end
