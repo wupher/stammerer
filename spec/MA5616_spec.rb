@@ -16,4 +16,18 @@ describe "MA5616 can tetrieve multi info" do
     system_info["The description of this node"].should =~ /Huawei/
     system_info["The description of this node"].should =~ /Huawei/
   end
+  
+  it "should get active alarm information" do
+    alarm_info = @ma5616.tel_active_alarm
+    table_header = alarm_info[0]
+    
+    table_header[0].should =~ /AlarmSN/
+    table_header[1].should =~ /Date&Time/
+    table_header[2].should =~ /Alarm Name\/Para/
+    
+    table_data = alarm_info[1]
+    table_data.length == 3
+    table_data[0].should =~ /\d/
+    table_data[1].should =~ /\d{4}/
+  end
 end
