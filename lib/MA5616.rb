@@ -28,7 +28,7 @@ class MA5616
   end
 
   def tel_pon_sn()
-    telnet_pair_cmd('display pon sn').to_json
+    telnet_pair_cmd('display pon sn')
   end
 
   def tel_version_info(frame=0, slot=0)
@@ -83,8 +83,16 @@ class MA5616
     cmd_options = {:gponnni_mode => true, :gponnni_port => "#{frame}/#{slot}/#{port}"}
     telnet_multi_type("display onu info", cmd_options)
   end
+  
+  def tel_display_mac_address(frame=0, slot=1)
+    telnet_table_cmd("display mac-address board #{frame}/#{slot}")
+  end
+  
+  def tel_active_alarm()
+    telnet_multi_row_table_cmd("display alarm active all list")
+  end
 end
 
 # ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/device_configurations/MA5616.yaml"))
 # ma5616 = MA5616.new(ma5616_configuration)
-# p ma5616.tel_board_info_to_json
+# p ma5616.tel_active_alarm

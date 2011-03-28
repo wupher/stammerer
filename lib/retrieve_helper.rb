@@ -68,3 +68,26 @@ def retrieve_multi_pair(str, seperator=':')
   result
 end
 
+def retrieve_return_row_table(dest_array)
+  
+  # p dest_array
+  
+  dest_array.each_index do |i|
+    if (i + 1) < (dest_array.size) and (dest_array[i].class == String) and (dest_array[i+1].class == String)
+      dest_array[i] << dest_array[i+1]
+      dest_array.delete_at(i+1)
+    end
+  end
+  
+  # p dest_array
+  
+  dest_array.each_index do |i|
+    if i-1 >0 and dest_array[i].class == String and dest_array[i-1].class == Array
+      arr = dest_array[i-1]
+      arr[arr.size - 1] << dest_array[i]
+      dest_array.delete_at i
+    end
+    dest_array
+  end
+end
+

@@ -1,6 +1,7 @@
 name: MA5616测试设备
-host: 10.100.0.253
+host: 10.100.0.3
 port: 23
-username: fanwu5
-password: abc123
-prompt: "(User name:)|(User password:)|(MA5616>)|(MA5616#)|(password:)|MA5616\(config\)#|MA5616\(config-.+\)#"
+username: root
+password: mduadmin
+#prompt: "(User name:)|(User password:)|(MA5616>)|(MA5616#)|(password:)|MA5616\(config\)#|MA5616\(config-.+\)#"
+prompt: "(User name:)|(User password:)|(password:)|(YXXC78#P-MA5616-02>)|(YXXC78#P-MA5616-02#)|YXXC78#P-MA5616-02\(config\)#|YXXC78#P-MA5616-02\(config-.+\)#"

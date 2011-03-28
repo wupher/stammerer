@@ -59,6 +59,22 @@ module Telnetable
     end
   end
   
+  def telnet_multi_row_table_cmd(cmd, cmd_options=nil)
+    telnet_output = skeleton_command(cmd,cmd_options) do |telnet, cmd_result|
+      telnet.cmd(cmd){ |ret| cmd_result << ret unless ret.length < 3 or ret =~ /-{10}/  }
+    end
+    big_string = telnet_output.inject{ |sum, line| sum << line  }
+    table_result = []
+    # p big_string
+    # print big_string
+    big_string.each_line do |line| 
+      table_result << line.split('  ').reject!{ |x| x.empty?} if line.split('  ').length > 2 and line !~ /^\s{20,}\w/
+      table_result << line.strip if line =~ /^\s{20,}\w/
+    end
+
+    table_result = retrieve_return_row_table table_result
+  end
+  
   def telnet_multi_type(cmd, cmd_options=nil)
     the_result = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
       telnet.cmd(cmd){|ret| cmd_result << ret}
