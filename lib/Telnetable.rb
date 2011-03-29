@@ -19,12 +19,13 @@ module Telnetable
     
     cmd_result = []
     yield telnet, cmd_result
-    telnet.close
     cmd_result
   rescue Errno::ECONNREFUSED  => err
     return {:ERROR => "#{@host}拒绝连接：#{err}"}
   rescue Timeout::Error => err
     return {:ERROR => "操作超时：#{err}"}
+  ensure
+    telnet.close if telnet
   end
   
   def prepare_cmd_options(telnet, command_options={})
