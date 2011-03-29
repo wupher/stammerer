@@ -70,14 +70,14 @@ end
 
 def retrieve_return_row_table(dest_array)
   
-  # p dest_array
-  
-  dest_array.each_index do |i|
-    if (i + 1) < (dest_array.size) and (dest_array[i].class == String) and (dest_array[i+1].class == String)
-      dest_array[i] << dest_array[i+1]
-      dest_array.delete_at(i+1)
+  (dest_array.size() -1).downto(0) do |i|
+    if i>0 and dest_array[i].class == String and dest_array[i-1].class == String
+      dest_array[i-1] << " #{dest_array[i]}"
+      dest_array[i]  = "-----#{dest_array[i]}"
     end
   end
+
+  dest_array.delete_if{ |x|  x =~ /-----/}
   
   # p dest_array
   
