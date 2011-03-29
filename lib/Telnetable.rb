@@ -12,7 +12,8 @@ module Telnetable
     
     telnet.cmd("\n")
     telnet.cmd(@user_name)
-    telnet.cmd(@password)
+    telnet.cmd(@password){ |output| return {:ERROR => "用户名或密码错误：\n #{@user_name}|#{@password}\n error info:#{output}"} if 
+    output =~ /Username or password invalid/}
     
     telnet.cmd('scroll 512')
     prepare_cmd_options(telnet, command_options)
@@ -55,6 +56,7 @@ module Telnetable
     array_type_result = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
       telnet.cmd(cmd){ |ret| tmp = retrieve_pair_info(ret); cmd_result << tmp unless tmp.empty? }
     end
+    return array_type_result if array_type_result.class==Hash and array_type_result[:ERROR]
     {"pair" => array_type_result.inject{ |hash, x| hash.update x}}
   end
   
@@ -69,6 +71,7 @@ module Telnetable
     telnet_output = skeleton_command(cmd,cmd_options) do |telnet, cmd_result|
       telnet.cmd(cmd){ |ret| cmd_result << ret unless ret.length < 3 or ret =~ /-{10}/  }
     end
+    return telnet_output if telnet_output.class==Hash and telnet_output[:ERROR]
     big_string = telnet_output.inject{ |sum, line| sum << line  }
     table_result = []
     # p big_string
@@ -85,6 +88,7 @@ module Telnetable
     the_result = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
       telnet.cmd(cmd){|ret| cmd_result << ret}
     end
+    return the_result if the_result.class==Hash and the_result[:ERROR]
     the_result.delete_if {|x| x.length < 10  }
     the_result.each{ |x| x.delete!("-")  }
 
@@ -109,6 +113,7 @@ module Telnetable
     the_result = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
        telnet.cmd(cmd){ |ret| cmd_result << ret}
      end
+     return the_result if the_result.class==Hash and the_result[:ERROR]
      the_result.delete_if{ |x| x.length < 10  }
      the_result.each{ |x| x.delete("-") }
      
@@ -134,6 +139,7 @@ module Telnetable
     output = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
       telnet.cmd(cmd){ |ret| cmd_result << ret  }
     end
+    return output if output.class==Hash and output[:ERROR]
     output.delete_if{ |x| x.length < 2 or x=~ /-{10}/}
     output.each{ |x| x.strip!}
 
