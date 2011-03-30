@@ -62,9 +62,15 @@ module Telnetable
   
   
   def telnet_table_cmd(cmd, cmd_options=nil)
-    skeleton_command(cmd,cmd_options) do |telnet, cmd_result|
-      telnet.cmd(cmd){ |ret| cmd_result << ret.split(' ') if ret.split(' ').length > 2 }
+    output = skeleton_command(cmd,cmd_options) do |telnet, cmd_result|  
+      telnet.cmd(cmd){|ret| cmd_result << ret if ret.split(' ').length > 2}
     end
+    result = []
+    output.join('').each_line do |line|
+      line.gsub!(/-{10,}/,'')
+      result << line.split(' ') if line.split(' ').length > 2
+    end
+    result
   end
   
   def telnet_multi_row_table_cmd(cmd, cmd_options=nil)

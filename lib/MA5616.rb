@@ -95,4 +95,4 @@ end
 
 # ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/device_configurations/MA5616.yaml"))
 # ma5616 = MA5616.new(ma5616_configuration)
-# p ma5616.tel_version_info
+# p ma5616.tel_board_info
