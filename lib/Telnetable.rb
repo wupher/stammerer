@@ -76,14 +76,15 @@ module Telnetable
   
   def telnet_multi_row_table_cmd(cmd, cmd_options=nil)
     telnet_output = skeleton_command(cmd,cmd_options) do |telnet, cmd_result|
-      telnet.cmd(cmd){ |ret| cmd_result << ret unless ret.length < 3 or ret =~ /-{10}/  }
+      telnet.cmd(cmd){ |ret| cmd_result << ret unless ret.length < 3}
     end
     return telnet_output if telnet_output.class==Hash and telnet_output[:ERROR]
-    big_string = telnet_output.inject{ |sum, line| sum << line  }
+    big_string = telnet_output.join(' ')
     table_result = []
     # p big_string
     # print big_string
     big_string.each_line do |line| 
+      line.gsub!(/-{10,}/,'')
       table_result << line.split('  ').reject!{ |x| x.empty?} if line.split('  ').length > 2 and line !~ /^\s{20,}\w/
       table_result << line.strip if line =~ /^\s{20,}\w/
     end
