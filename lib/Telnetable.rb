@@ -65,6 +65,7 @@ module Telnetable
     output = skeleton_command(cmd,cmd_options) do |telnet, cmd_result|  
       telnet.cmd(cmd){|ret| cmd_result << ret if ret.split(' ').length > 2}
     end
+    return output if output.class == Hash and output[:ERROR]
     result = []
     output.join('').each_line do |line|
       line.gsub!(/-{10,}/,'')
