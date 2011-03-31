@@ -98,5 +98,5 @@ class MA5616
 end
 
 # ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/device_configurations/MA5616.yaml"))
-# ma5616 = MA5616.new(ma5616_configuration)
+# ma5616 = MA5616.new(ma5616_configuration['MA5616_ONLINE'])
 # p ma5616.tel_display_port_mac_address

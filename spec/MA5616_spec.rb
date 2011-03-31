@@ -5,7 +5,7 @@ describe "MA5616 can tetrieve multi info" do
   
   before(:each) do
     ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/../lib/device_configurations/"+"MA5616.yaml"))
-    @ma5616 = MA5616.new(ma5616_configuration)
+    @ma5616 = MA5616.new(ma5616_configuration['MA5616_TEST'])
   end
   
   it "should get onu system info" do
@@ -16,6 +16,8 @@ describe "MA5616 can tetrieve multi info" do
     system_info["The description of this node"].should =~ /Huawei/
     system_info["The description of this node"].should =~ /Huawei/
   end
+  
+  sleep 2
   
   it "should get active alarm information" do
     alarm_info = @ma5616.tel_active_alarm
