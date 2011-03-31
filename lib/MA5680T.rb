@@ -17,4 +17,4 @@ end
 
 # device_config = YAML::load(File.open(File.dirname(__FILE__)+'/device_configurations' + '/MA5680T.yaml'))
 # ma5680 = MA5680T.new(device_config)
-# p ma5680.tel_gpon_port_performance
+# a = ma5680.tel_gpon_port_performance
