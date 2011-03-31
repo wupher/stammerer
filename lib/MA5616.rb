@@ -88,6 +88,10 @@ class MA5616
     telnet_table_cmd("display mac-address board #{frame}/#{slot}")
   end
   
+  def tel_display_port_mac_address(frame=0, slot=1, port=3)
+    telnet_table_cmd("display mac-address port #{frame}/#{slot}/#{port}")
+  end
+  
   def tel_active_alarm()
     telnet_multi_row_table_cmd("display alarm active all list")
   end
@@ -95,4 +99,4 @@ end
 
 # ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/device_configurations/MA5616.yaml"))
 # ma5616 = MA5616.new(ma5616_configuration)
-# p ma5616.tel_active_alarm
+# p ma5616.tel_display_port_mac_address
