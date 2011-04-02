@@ -5,7 +5,9 @@ describe "MA5616 can tetrieve multi info" do
   
   before(:each) do
     ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/../lib/device_configurations/"+"MA5616.yaml"))
+    
     @ma5616 = MA5616.new(ma5616_configuration['MA5616_TEST'])
+    # @online_device = MA5616.new(ma5616_configuration['MA5616_ONLINE'])
   end
   
   it "should get onu system info" do
