@@ -159,4 +159,28 @@ module Telnetable
     end
     result
   end
+  
+  def telnet_section_pari_cmd(cmd, cmd_options=nil, *sections)
+    raise "Sections cannot be nil" if sections.nil?
+    output = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
+      telnet.cmd(cmd){ |ret| cmd_result << ret }
+    end
+    return output if output.class==Hash and output[:ERROR]  
+    
+    result,sec_mod = {}, false
+    big_str = output.join(" ")
+    sections.each do |sec|
+      result[sec] = {}
+      big_str.each_line do |line|
+        reg = Regexp.new(sec)
+        next if line !~ reg and !sec_mod
+        sec_mod = true if line =~ reg and !sec_mod
+        if sec_mod and line =~ /:/
+          result[sec].update retrieve_pair_info(line)
+        end 
+      end
+      sec_mod = false
+    end
+    result
+  end
 end

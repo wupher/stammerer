@@ -74,7 +74,7 @@ class MA5616
 
   def tel_adsl_port_performance(frame=0, slot=4, port=0)
     cmd_options = {:adsl_mode => true, :adsl_board_frameid => frame, :adsl_board_slotid  => slot}
-    telnet_pair_cmd("display statistics performance #{port} current-15minutes", cmd_options)
+    telnet_section_pari_cmd("display statistics performance #{port} current-15minutes", cmd_options, "ATU-C","ATU-R")
   end
 
 
@@ -99,4 +99,4 @@ end
 
 # ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/device_configurations/MA5616.yaml"))
 # ma5616 = MA5616.new(ma5616_configuration['MA5616_ONLINE'])
-# p ma5616.tel_display_port_mac_address
+# p ma5616.tel_adsl_port_performance

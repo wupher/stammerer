@@ -32,4 +32,13 @@ describe "MA5616 can tetrieve multi info" do
     table_data[0].should =~ /\d/
     table_data[1].should =~ /\d{4}/
   end
+  
+  sleep 2
+  
+  it "should get section pair type cmd info" do
+    perform_info  = @ma5616.tel_adsl_port_performance
+    p perform_info
+    perform_info['ATU-C'].should_not be_empty
+    perform_info['ATU-R'].should_not be_empty
+  end
 end
