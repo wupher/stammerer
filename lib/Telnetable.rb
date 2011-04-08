@@ -144,10 +144,13 @@ module Telnetable
   end
   
   def telnet_return_pair(cmd, cmd_options=nil)
-    output = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
+    original_output = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
       telnet.cmd(cmd){ |ret| cmd_result << ret  }
     end
-    return output if output.class==Hash and output[:ERROR]
+    return original_output if original_output.class==Hash and original_output[:ERROR]
+    
+    output = original_output.join("\n").split("\n") #用于处理linux下jruby经常将多个结果合并到一个串中返回
+    
     output.delete_if{ |x| x.length < 2 or x=~ /-{10}/}
     output.each{ |x| x.strip!}
 
