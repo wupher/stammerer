@@ -88,8 +88,14 @@ class MA5616
     telnet_table_cmd("display mac-address board #{frame}/#{slot}")
   end
   
-  def tel_display_port_mac_address(frame=0, slot=1, port=3)
-    telnet_table_cmd("display mac-address port #{frame}/#{slot}/#{port}")
+  def tel_display_port_mac_address(frame=0, slot=1, port=4)
+    output = telnet_table_cmd("display mac-address port #{frame}/#{slot}/#{port}")
+    if output[1] == ["INDEX","TYPE","PARA"]
+      output[0] = ["SRV-P INDEX", "TYPE", "MAC", "MAC TYPE", "FRAME", "SLOT", "PORT", "VPI", "VCI", "FLOW TYPE",
+         "FLOW PARA", "VLANID"]
+      output.delete_at 1
+    end
+    output
   end
   
   def tel_active_alarm()
@@ -97,6 +103,6 @@ class MA5616
   end
 end
 
-# ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/device_configurations/MA5616.yaml"))
-# ma5616 = MA5616.new(ma5616_configuration['MA5616_ONLINE'])
-# p ma5616.tel_adsl_port_performance
+ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/device_configurations/MA5616.yaml"))
+ma5616 = MA5616.new(ma5616_configuration['MA5616_ONLINE'])
+p ma5616.tel_display_port_mac_address
