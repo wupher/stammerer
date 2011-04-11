@@ -186,4 +186,12 @@ module Telnetable
     end
     result
   end
+  
+  def telnet_plain_text(cmd, cmd_options=nil)
+    output = skeleton_command(cmd, cmd_options) do |telnet, cmd_result|
+      telnet.cmd(cmd){ |ret| cmd_result << ret  }
+    end
+    return output if output.class==Hash and output[:ERROR]  
+    output.join("\n").split("\n")
+  end
 end

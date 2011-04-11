@@ -101,8 +101,25 @@ class MA5616
   def tel_active_alarm()
     telnet_multi_row_table_cmd("display alarm active all list")
   end
+  
+  def tel_ping_test(ip="10.90.100.2")
+    output = telnet_plain_text("ping #{ip}")
+    result = {}
+    # p output
+    output.each do |line|
+      result["packets_transmitted"] = line[/(\d) packet\(s\) transmitted/,1] if line =~ /packet\(s\) transmitted/
+      result["packets_received"] = line[/(\d) packet\(s\) received/,1] if line=~ /packet\(s\) received/
+      result["packets_loss_percentage"] = line[/(\d\.\d\d)% packet loss/,1] if line =~ /packet loss/
+      if line =~ /round-trip min\/avg\/max = \d+\/\d+\/\d+ ms/
+        result["round-trip_min"] = line[/(\d+)\/\d+\/\d+ ms/,1]
+        result["round-trip_avg"] = line[/\d+\/(\d+)\/\d+ ms/,1]
+        result["round-trip_max"] = line[/\d+\/\d+\/(\d+) ms/,1]
+      end
+    end
+    {"pair" => result}
+  end
 end
 
 ma5616_configuration = YAML::load(File.open(File.dirname(__FILE__)+"/device_configurations/MA5616.yaml"))
 ma5616 = MA5616.new(ma5616_configuration['MA5616_ONLINE'])
-p ma5616.tel_display_port_mac_address
+p ma5616.tel_ping_test
